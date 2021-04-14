@@ -18,18 +18,8 @@
         <div class="alert alert-warning small" role="alert">{{ error|escape }}</div>
         {% endfor %}
         {% endif %}
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group">
-            <input type="text" name="username" class="form-control" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <input type="password" name="password" class="form-control" placeholder="Password">
-          </div>
-          <button type="submit" class="btn btn-success btn-block">Login</button>
-        </form>
-      </div>
       <p><a class="btn btn-success btn-block" href="{% url 'signup' %}">Sign up</a></p>
+      <p><a class="btn btn-success btn-block" href="/login/keycloak">Login</a></p>
     </div>
   </div>
 </div>

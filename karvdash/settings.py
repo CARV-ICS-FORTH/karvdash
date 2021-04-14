@@ -47,6 +47,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
+    'social_django',
     'crispy_forms',
     'impersonate',
     'django.contrib.admin',
@@ -157,12 +158,31 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-# Authentication
+# Authentication with OIDC
 
-AUTHENTICATION_BACKENDS = ['dashboard.auth_backends.ProxiedModelBackend']
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.keycloak.KeycloakOAuth2',
+    # 'social_core.backends.google.GoogleOpenId',
+    # 'social_core.backends.google.GoogleOAuth2',
+    # 'social_core.backends.google.GoogleOAuth',
+    # 'social_core.backends.twitter.TwitterOAuth',
+    # 'social_core.backends.facebook.FacebookOAuth2',
+    'dashboard.auth_backends.ProxiedModelBackend',
+)
+
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_KEYCLOAK_KEY = 'karvdash'
+# SOCIAL_AUTH_KEYCLOAK_SECRET = 'a7a41s-245e-...'
+SOCIAL_AUTH_KEYCLOAK_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAocmLvkFs8nTyKHhFwM9KKdukZh5POXqd/cFYjlwhIQztLrnYt+o3dpcRsySXHH+mk2rcR/8N5MMyzREDAPB3zP9Hmg1UYe27IiCdVO4UNvbjH4D/5+RVAeI8entzGEGrX1zpcPM2ExYr2xTRZwmOR5oml3stQe1PPZDZYVJHNDI04IG04TMRXnpdIs79Z8rf+62vWbRPRq//2PC8fQ5HzgDFCmcZyc+0mXrUDgEMhmHIJdzBKwJ24Z/cKXQoKC0lDI5I35mR+Q8jnc0u/HnYFsH+G/fxIq8Iqj1owR3THuIf/ZXuw+HkAJjLfajcjC4so9NuESibrhwzG7g7rDCWZQIDAQAB'
+SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
+    'http://keycloak.localtest.me/auth/realms/myrealm/protocol/openid-connect/auth'
+SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
+    'http://keycloak.localtest.me/auth/realms/myrealm/protocol/openid-connect/token'
 
 
 # Form styling with crispy-forms
