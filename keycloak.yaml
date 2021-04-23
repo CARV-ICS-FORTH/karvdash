@@ -31,6 +31,33 @@ spec:
     app: keycloak
   type: LoadBalancer
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/Users/chazapis/Source/FORTH/karvdash/keycloak"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,6 +76,18 @@ spec:
         app: keycloak
     spec:
       containers:
+      - name: postgres
+        image: postgres
+        env:
+        - name: POSTGRES_DB
+          value: "keycloak"
+        - name: POSTGRES_USER
+          value: "keycloak"
+        - name: POSTGRES_PASSWORD
+          value: "password"
+        volumeMounts:
+        - mountPath: "/var/lib/postgresql/data"
+          name: postgres-pv-storage
       - name: keycloak
         image: quay.io/keycloak/keycloak:12.0.4
         env:
@@ -59,7 +98,17 @@ spec:
         - name: PROXY_ADDRESS_FORWARDING
           value: "true"
         - name: DB_VENDOR
-          value: "h2"
+          value: "POSTGRES"
+        - name: DB_ADDR
+          value: "127.0.0.1"
+        - name: DB_SCHEMA
+          value: "public"
+        - name: DB_DATABASE
+          value: "keycloak"
+        - name: DB_USER
+          value: "keycloak"
+        - name: DB_PASSWORD
+          value: "password"
         ports:
         - name: http
           containerPort: 8080
@@ -69,3 +118,7 @@ spec:
         #   httpGet:
         #     path: /auth/realms/master
         #     port: 8080
+      volumes:
+        - name: postgres-pv-storage
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim

@@ -178,11 +178,11 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KEYCLOAK_KEY = 'karvdash'
 # SOCIAL_AUTH_KEYCLOAK_SECRET = 'a7a41s-245e-...'
-SOCIAL_AUTH_KEYCLOAK_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAocmLvkFs8nTyKHhFwM9KKdukZh5POXqd/cFYjlwhIQztLrnYt+o3dpcRsySXHH+mk2rcR/8N5MMyzREDAPB3zP9Hmg1UYe27IiCdVO4UNvbjH4D/5+RVAeI8entzGEGrX1zpcPM2ExYr2xTRZwmOR5oml3stQe1PPZDZYVJHNDI04IG04TMRXnpdIs79Z8rf+62vWbRPRq//2PC8fQ5HzgDFCmcZyc+0mXrUDgEMhmHIJdzBKwJ24Z/cKXQoKC0lDI5I35mR+Q8jnc0u/HnYFsH+G/fxIq8Iqj1owR3THuIf/ZXuw+HkAJjLfajcjC4so9NuESibrhwzG7g7rDCWZQIDAQAB'
+SOCIAL_AUTH_KEYCLOAK_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApgfx6KuqyyooeevUhuQLtBxMktQzRYPMYSNBVUFtfE/HeRHvGlV9kwBApfXHwSuX4Z0DI6eJ5TfYACQ0HLA0PWOd+cJ3mxCScZRxRWWnG+BvlPm516mOx/iLdcDXj9PpPGl9WestQRN4oRK4V3Jozd/S+gnjy6WWwCNxsaH43tIxkRt/1NtL+ta75JE44noNlSf/MRxyktOEPBtaCY+ElnPX6kynIpsdkWUrJCmpAWwrvKUeUkUxJLllOgmAXaW7yFw97WYkEksu5CjNeH/h/l2R6Zj2DYlrtVDSCBrDq2cPuZCNprhIqBhgduwRYqG0jWfstUMVvHV7g86vUXh3hwIDAQAB'
 SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
-    'http://keycloak.localtest.me/auth/realms/myrealm/protocol/openid-connect/auth'
+    'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/auth'
 SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
-    'http://keycloak.localtest.me/auth/realms/myrealm/protocol/openid-connect/token'
+    'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/token'
 
 
 # Form styling with crispy-forms
