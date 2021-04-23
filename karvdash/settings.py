@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'impersonate.middleware.ImpersonateMiddleware',
+    'dashboard.middleware.SetUserProxyMiddleware',
     'karvdash.middleware.AddLogUserHeaderMiddleware',
 ]
 
@@ -162,12 +163,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.keycloak.KeycloakOAuth2',
-    # 'social_core.backends.google.GoogleOpenId',
-    # 'social_core.backends.google.GoogleOAuth2',
-    # 'social_core.backends.google.GoogleOAuth',
-    # 'social_core.backends.twitter.TwitterOAuth',
-    # 'social_core.backends.facebook.FacebookOAuth2',
-    'dashboard.auth_backends.ProxiedModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 LOGIN_URL = '/login'
@@ -183,6 +179,9 @@ SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
     'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/auth'
 SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
     'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/token'
+
+from social_core.pipeline import DEFAULT_AUTH_PIPELINE
+SOCIAL_AUTH_PIPELINE = DEFAULT_AUTH_PIPELINE + ('dashboard.social_auth.add_staff_authorization',)
 
 
 # Form styling with crispy-forms

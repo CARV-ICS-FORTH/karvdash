@@ -35,6 +35,6 @@ from django.urls import include, path
 urlpatterns = [
     path('', include('dashboard.urls')),
     path('', include('social_django.urls', namespace='social')),
-    # path('impersonate/', include('impersonate.urls')),
+    path('impersonate/', include('impersonate.urls')),
     path('admin/', admin.site.urls),
 ]

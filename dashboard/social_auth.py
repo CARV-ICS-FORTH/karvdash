@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.contrib.auth.backends import ModelBackend
 
-from .models import User
+def add_staff_authorization(backend, user, response, *args, **kwargs):
+    if not user:
+        return
 
+    try:
+        roles = response['realm_access']['roles']
+    except KeyError:
+        return
 
-class ProxiedModelBackend(ModelBackend):
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
+    should_be_staff = ('admin' in roles)
+    if not user.is_staff == should_be_staff:
+        user.is_staff = should_be_staff
+        user.save()
