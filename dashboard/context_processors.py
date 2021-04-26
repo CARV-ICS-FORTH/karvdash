@@ -15,7 +15,10 @@
 from django.conf import settings as django_settings
 
 def settings(request):
-    return {'dashboard_title': django_settings.DASHBOARD_TITLE,
+    return {'ingress_url': django_settings.INGRESS_URL,
+            'dashboard_title': django_settings.DASHBOARD_TITLE,
             'dashboard_theme': django_settings.DASHBOARD_THEME,
             'issues_url': django_settings.ISSUES_URL,
-            'datasets_available': django_settings.DATASETS_AVAILABLE}
+            'datasets_available': django_settings.DATASETS_AVAILABLE,
+            'keycloak_key': django_settings.SOCIAL_AUTH_KEYCLOAK_KEY,
+            'keycloak_logout_url': django_settings.SOCIAL_AUTH_KEYCLOAK_LOGOUT_URL}

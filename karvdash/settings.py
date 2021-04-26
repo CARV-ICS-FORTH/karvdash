@@ -173,12 +173,14 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KEYCLOAK_KEY = 'karvdash'
-# SOCIAL_AUTH_KEYCLOAK_SECRET = 'a7a41s-245e-...'
+SOCIAL_AUTH_KEYCLOAK_SECRET = '24c7c4dd-e876-4be0-90aa-f4631936f813'
 SOCIAL_AUTH_KEYCLOAK_PUBLIC_KEY = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApgfx6KuqyyooeevUhuQLtBxMktQzRYPMYSNBVUFtfE/HeRHvGlV9kwBApfXHwSuX4Z0DI6eJ5TfYACQ0HLA0PWOd+cJ3mxCScZRxRWWnG+BvlPm516mOx/iLdcDXj9PpPGl9WestQRN4oRK4V3Jozd/S+gnjy6WWwCNxsaH43tIxkRt/1NtL+ta75JE44noNlSf/MRxyktOEPBtaCY+ElnPX6kynIpsdkWUrJCmpAWwrvKUeUkUxJLllOgmAXaW7yFw97WYkEksu5CjNeH/h/l2R6Zj2DYlrtVDSCBrDq2cPuZCNprhIqBhgduwRYqG0jWfstUMVvHV7g86vUXh3hwIDAQAB'
 SOCIAL_AUTH_KEYCLOAK_AUTHORIZATION_URL = \
     'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/auth'
 SOCIAL_AUTH_KEYCLOAK_ACCESS_TOKEN_URL = \
     'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/token'
+SOCIAL_AUTH_KEYCLOAK_LOGOUT_URL = \
+    'http://keycloak.localtest.me/auth/realms/science-hangar/protocol/openid-connect/logout'
 
 from social_core.pipeline import DEFAULT_AUTH_PIPELINE
 SOCIAL_AUTH_PIPELINE = DEFAULT_AUTH_PIPELINE + ('dashboard.social_auth.add_staff_authorization',)
@@ -233,7 +235,7 @@ SERVICE_DOMAIN = os.getenv('KARVDASH_SERVICE_DOMAIN')
 
 # Ingress domain
 
-INGRESS_URL = os.getenv('KARVDASH_INGRESS_URL', 'http://localtest.me')
+INGRESS_URL = os.getenv('KARVDASH_INGRESS_URL', 'http://localtest.me:8000')
 
 
 # Theme

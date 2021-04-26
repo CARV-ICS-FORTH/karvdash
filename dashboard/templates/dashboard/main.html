@@ -76,7 +76,7 @@
               <a class="dropdown-item text-secondary" href="{% url 'change_password' %}?next={{ request.path }}">Change password</a>
               {% if issues_url %}<a class="dropdown-item text-secondary" href="{{ issues_url }}" target="_blank">Report an issue</a>{% endif %}
               <a class="dropdown-item text-secondary" href="{% static 'docs/index.html' %}" target="_blank">Documentation</a>
-              <a class="dropdown-item text-secondary" href="{% url 'logout' %}">Logout</a>
+              <a class="dropdown-item text-secondary" href="{{ keycloak_logout_url }}?initiating_idp={{ keycloak_key }}&post_logout_redirect_uri={{ ingress_url }}{% url 'logout' %}">Logout</a>
             </div>
           </div>
         </div>
