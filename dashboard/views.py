@@ -22,12 +22,11 @@ from django.http import HttpResponse, FileResponse
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import SetPasswordForm, PasswordChangeForm
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 
 from .models import User
-from .forms import SignUpForm, EditUserForm, AddServiceForm, CreateServiceForm, AddTemplateForm, AddImageForm, AddDatasetForm, CreateDatasetForm, AddFolderForm, AddFilesForm, AddImageFromFileForm
+from .forms import EditUserForm, AddServiceForm, CreateServiceForm, AddTemplateForm, AddImageForm, AddDatasetForm, CreateDatasetForm, AddFolderForm, AddFilesForm, AddImageFromFileForm
 from .api import ServiceResource, TemplateResource, DatasetResource
 from .utils.kubernetes import KubernetesClient
 from .utils.docker import DockerClient
@@ -695,25 +694,6 @@ def users(request):
     if request.method == 'POST':
         if 'action' not in request.POST:
             messages.error(request, 'Invalid action.')
-        elif request.POST['action'] in ('Activate', 'Deactivate', 'Promote', 'Demote'):
-            action = request.POST['action']
-            username = request.POST.get('username', None)
-            if username and username != request.user.username:
-                user = User.objects.get(username=username)
-                if user:
-                    if action == 'Activate':
-                        user.is_active = True
-                        user.update_kubernetes_credentials()
-                    elif action == 'Deactivate':
-                        user.is_active = False
-                        user.delete_kubernetes_credentials()
-                    elif action in ('Promote', 'Demote'):
-                        user.is_staff = True if action == 'Promote' else False
-                    user.save()
-                    User.export_to_htpasswd(settings.HTPASSWD_EXPORT_DIR)
-                    messages.success(request, 'User "%s" %s.' % (username, action.lower() + 'd'))
-            else:
-                messages.error(request, 'Invalid username')
         elif request.POST['action'] == 'Delete':
             username = request.POST.get('username', None)
             if username and username != request.user.username:
@@ -744,7 +724,6 @@ def users(request):
                         messages.error(request, 'Failed to delete user "%s": %s.' % (username, str(e)))
                     else:
                         user.delete()
-                        User.export_to_htpasswd(settings.HTPASSWD_EXPORT_DIR)
                         messages.success(request, 'User "%s" deleted.' % username)
             else:
                 messages.error(request, 'Invalid username')
@@ -759,13 +738,12 @@ def users(request):
         contents.append({'id': user.id,
                          'username': user.username,
                          'email': user.email,
-                         'active': 1 if user.is_active else 0,
                          'admin': 1 if user.is_staff else 0,
                          'actions': True if user.username != request.user.username else False})
 
     # Sort them up.
     sort_by = request.GET.get('sort_by')
-    if sort_by and sort_by in ('username', 'email', 'active', 'admin'):
+    if sort_by and sort_by in ('username', 'email', 'admin'):
         request.session['users_sort_by'] = sort_by
     else:
         sort_by = request.session.get('users_sort_by', 'username')
@@ -811,70 +789,6 @@ def user_edit(request, username):
                                                    'form': form,
                                                    'action': 'Edit',
                                                    'next': reverse('users')})
-
-@staff_member_required
-def user_change_password(request, username):
-    # Validate given username.
-    if username == request.user.username:
-        messages.error(request, 'Invalid username.')
-        return redirect('users')
-    user = User.objects.get(username=username)
-    if not user:
-        messages.error(request, 'Invalid username.')
-        return redirect('users')
-
-    if request.method == 'POST':
-        form = SetPasswordForm(user, request.POST)
-        if form.is_valid():
-            form.save()
-            user.update_kubernetes_credentials()
-            User.export_to_htpasswd(settings.HTPASSWD_EXPORT_DIR)
-            messages.success(request, 'Password changed for user "%s".' % username)
-            return redirect('users')
-    else:
-        form = SetPasswordForm(user)
-
-    return render(request, 'dashboard/form.html', {'title': 'Change User Password',
-                                                   'form': form,
-                                                   'action': 'Change',
-                                                   'next': reverse('users')})
-
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-
-            message = 'Your account has been created, but in order to login an administrator will have to activate it.'
-            return render(request, 'dashboard/signup.html', {'message': message,
-                                                             'next': settings.LOGIN_REDIRECT_URL})
-    else:
-        form = SignUpForm()
-    return render(request, 'dashboard/signup.html', {'form': form,
-                                                     'next': settings.LOGIN_REDIRECT_URL})
-
-@login_required
-def change_password(request):
-    next_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            user.update_kubernetes_credentials()
-            User.export_to_htpasswd(settings.HTPASSWD_EXPORT_DIR)
-            messages.success(request, 'Password successfully changed.')
-            return redirect(next_url)
-    else:
-        form = PasswordChangeForm(request.user)
-
-    return render(request, 'dashboard/form.html', {'title': 'Change Password',
-                                                   'form': form,
-                                                   'action': 'Change',
-                                                   'next': next_url})
 
 @login_required
 def logout(request, next_url):

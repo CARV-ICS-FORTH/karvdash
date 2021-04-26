@@ -70,8 +70,6 @@ spec:
             secretKeyRef:
               name: {{ .Release.Name }}-secret
               key: admin-password
-        - name: KARVDASH_HTPASSWD_EXPORT_DIR
-          value: {{ .Values.karvdash.htpasswdExportDir | quote }}
         - name: KARVDASH_DASHBOARD_TITLE
           value: {{ .Values.karvdash.dashboardTitle | quote}}
         - name: KARVDASH_DASHBOARD_THEME

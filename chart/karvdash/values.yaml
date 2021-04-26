@@ -26,8 +26,6 @@ karvdash:
   djangoDebug:
   # The default admin password.
   adminPassword: admin
-  # If set, the path to export the htpasswd file in.
-  htpasswdExportDir:
   # The title of the dashboard.
   dashboardTitle: Dashboard
   # The theme of the dashboard. Choose between "evolve" and "CARV".

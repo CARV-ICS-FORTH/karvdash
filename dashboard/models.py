@@ -85,21 +85,9 @@ class User(AuthUser):
     class Meta:
         proxy = True
 
-    @classmethod
-    def export_to_htpasswd(cls, htpasswd_dir):
-        if not htpasswd_dir:
-            return
-        with open(os.path.join(htpasswd_dir, 'htpasswd'), 'w') as f:
-            for user in cls.objects.filter(is_active=True):
-                f.write('%s:$%s\n' % (user.username, user.password))
-
     @property
     def namespace(self):
         return 'karvdash-%s' % self.username
-
-    @property
-    def literal_auth(self):
-        return 'auth=%s:$%s\n' % (self.username, self.password)
 
     @property
     def file_domains(self):
@@ -149,20 +137,6 @@ class User(AuthUser):
             api_token = APIToken(user=self)
             api_token.save()
         return api_token
-
-    def update_kubernetes_credentials(self, kubernetes_client=None):
-        from .utils.kubernetes import KubernetesClient
-
-        if not kubernetes_client:
-            kubernetes_client = KubernetesClient()
-        kubernetes_client.update_secret(self.namespace, 'karvdash-auth', [self.literal_auth])
-
-    def delete_kubernetes_credentials(self, kubernetes_client=None):
-        from .utils.kubernetes import KubernetesClient
-
-        if not kubernetes_client:
-            kubernetes_client = KubernetesClient()
-        kubernetes_client.delete_secret(self.namespace, 'karvdash-auth')
 
 def generate_token():
     return ''.join(random.choice('0123456789abcdef') for n in range(40))

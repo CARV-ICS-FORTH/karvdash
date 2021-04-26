@@ -18,7 +18,6 @@
         <div class="alert alert-warning small" role="alert">{{ error|escape }}</div>
         {% endfor %}
         {% endif %}
-      <p><a class="btn btn-success btn-block" href="{% url 'signup' %}">Sign up</a></p>
       <p><a class="btn btn-success btn-block" href="{% url 'social:begin' 'keycloak' %}">Login</a></p>
     </div>
   </div>

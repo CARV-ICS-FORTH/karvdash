@@ -36,11 +36,8 @@ urlpatterns = [
     path('files/<path:path>', views.files, name='files'),
     path('users', views.users, name='users'),
     path('user/edit/<str:username>', views.user_edit, name='user_edit'),
-    path('user/change_password/<str:username>', views.user_change_password, name='user_change_password'),
 
-    path('signup', views.signup, name='signup'),
     path('login', auth_views.LoginView.as_view(template_name='dashboard/login.html'), name='login'),
-    path('change_password', views.change_password, name='change_password'),
     path('logout', views.logout, {'next_url': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 
     path('webhooks/mutate', webhooks.mutate),

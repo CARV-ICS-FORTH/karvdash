@@ -25,35 +25,7 @@ from .models import User
 validate_docker_name = RegexValidator(r'^[0-9a-z\-\.]*$', 'Only alphanumeric characters, dash, and period are allowed.')
 validate_docker_tag = RegexValidator(r'^[0-9a-zA-Z_\-\.]*$', 'Only alphanumeric characters, dash, underscore, and period are allowed.')
 
-validate_username = RegexValidator(r'^[a-z0-9]+$', 'Only lowercase alphanumeric characters are allowed.')
-
 validate_kubernetes_label = RegexValidator(r'^[a-z0-9]([-a-z0-9]*[a-z0-9])?$', 'Only lowercase alphanumeric characters and dash are allowed.')
-
-class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Required. Please use a valid email address.')
-
-    class Meta:
-        model = User
-        fields = ('username', 'password1', 'password2', 'email')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'].validators.append(validate_username)
-        self.fields['username'].help_text = 'Required. 150 characters or fewer. Letters and digits only.'
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            'username',
-            'password1',
-            'password2',
-            'email',
-            Submit('submit', 'Submit', css_class='btn-success btn-lg btn-block')
-        )
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
-            raise ValidationError('A user with that email already exists.')
-        return email
 
 class AddServiceForm(forms.Form):
     def __init__(self, *args, **kwargs):

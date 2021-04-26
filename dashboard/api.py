@@ -207,7 +207,6 @@ class ServiceResource(APIResource):
             f.write(template.yaml.encode())
 
         # Apply.
-        self.user.update_kubernetes_credentials(kubernetes_client=kubernetes_client)
         kubernetes_client.apply_yaml(service_yaml, namespace=self.user.namespace)
 
         service_template = template.format()

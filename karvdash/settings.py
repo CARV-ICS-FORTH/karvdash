@@ -94,16 +94,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'karvdash.wsgi.application'
 
 
-# Password hashes
-
-PASSWORD_HASHERS = [
-    'dashboard.hashers.APR1PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-]
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -170,6 +160,8 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+ACCOUNT_MANAGEMENT_URL = 'http://keycloak.localtest.me/auth/realms/science-hangar/account/'
+
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_KEYCLOAK_KEY = 'karvdash'
@@ -221,11 +213,6 @@ DOCKER_REGISTRY_NO_VERIFY = True if os.getenv('KARVDASH_DOCKER_REGISTRY_NO_VERIF
 SYSTEM_TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 SERVICE_TEMPLATE_DIR = os.path.join(DATABASE_DIR, 'templates')
 SERVICE_DATABASE_DIR = os.path.join(DATABASE_DIR, 'services')
-
-
-# Password file export
-
-HTPASSWD_EXPORT_DIR = os.getenv('KARVDASH_HTPASSWD_EXPORT_DIR')
 
 
 # API URL

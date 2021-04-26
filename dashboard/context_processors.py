@@ -18,6 +18,7 @@ def settings(request):
     return {'ingress_url': django_settings.INGRESS_URL,
             'dashboard_title': django_settings.DASHBOARD_TITLE,
             'dashboard_theme': django_settings.DASHBOARD_THEME,
+            'account_management_url': django_settings.ACCOUNT_MANAGEMENT_URL,
             'issues_url': django_settings.ISSUES_URL,
             'datasets_available': django_settings.DATASETS_AVAILABLE,
             'keycloak_key': django_settings.SOCIAL_AUTH_KEYCLOAK_KEY,
